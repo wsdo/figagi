@@ -1,0 +1,5 @@
+{
+	"title": "实验室的使用 - Feishu Docs",
+	"url": "https://agiclass.feishu.cn/wiki/YHKMwQWpFi1K04k5ZaRcsDihnEe",
+	"html": "AI 全栈课程使用手册\nWiki table of contents\n欢迎你，未来的 AI 全栈工程师\n开始学习\n实验室的使用\n本地运行代码\nFAQ\n提问指南\n(Mac) Python 环境安装&&版本切换\n(Window) Python环境安装\npip 是什么？\nVSCode 安装 && 使用指南\nPyCharm 安装及使用指南\n（加餐） Python环境与OpenAI基础概念\n本地运行OpenAI代码（多版本）\n如何获取：bing search key\n\n实验室的使用\n\nLast updated: Nov 17\n\n实验室的使用\n找到课件\n下载课件\n运行代码\n出错怎么办\n实验室的使用​\nCreated on July 29\n注意：​\n1.每天凌晨2点会自动清理所有在线服务：界面会提示需要 restart ，直接 restart就好了。​\n2.每天上课前更新课件也会出现 restart，直接 restart 就好了。​\n​\n在线实验室的网址是 https://learn.agiclass.ai。下面的简要帮助，足够支持你完成本课程的学习。如果你想对它了解更多，请参考 Project Jupyter Documentation — Jupyter Documentation 4.1.1 alpha documentation​\n找到课件​\n点击图中红色区域​\n​\n​\n下载课件​\n​\n​\nComments (0)\nHelp Center\nKeyboard Shortcuts"
+}

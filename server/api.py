@@ -25,7 +25,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "https://verba-golden-ragtriever.onrender.com",
-    "http://localhost:8000",
+    "http://localhost:6000",
 ]
 
 # Add middleware for handling Cross Origin Resource Sharing (CORS)
@@ -98,7 +98,7 @@ async def get_google_tag():
 async def query(payload: QueryPayload):
     try:
         system_msg, results = agiaid_engine.query(
-            payload.query, os.environ["VERBA_MODEL"]
+            payload.query
         )
         msg.good(f"Succesfully processed query: {payload.query}")
 

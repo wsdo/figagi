@@ -6,8 +6,8 @@ from pathlib import Path
 
 from wasabi import msg
 
-from goldenverba.components.reader.document import Document
-from goldenverba.components.reader.interface import InputForm, Reader
+from app.controllers.reader.document import Document
+from app.controllers.reader.interface import InputForm, Reader
 
 
 class SimpleReader(Reader):

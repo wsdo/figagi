@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def init_schema(model: str = "gpt-3.5-turbo"):
+def init_schema(model: str = "gpt-3.5-turbo-16k"):
     msg.divider("Creating Document and Chunk class")
 
     client = setup_client()

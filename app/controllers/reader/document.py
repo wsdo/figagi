@@ -1,4 +1,4 @@
-from goldenverba.components.chunking.chunk import Chunk
+from app.controllers.chunking.chunk import Chunk
 
 
 class Document:

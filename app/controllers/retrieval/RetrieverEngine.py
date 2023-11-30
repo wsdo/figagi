@@ -6,15 +6,11 @@ from wasabi import msg
 
 
 class RetrieverEngine(QueryEngine):
-    def query(self, query_string: str, model: str = None) -> tuple:
+    def query(self, query_string: str) -> tuple:
         """Execute a query to a receive specific chunks from Weaviate
         @parameter query_string : str - Search query
         @returns tuple - (system message, iterable list of results)
         """
-
-        if results:
-            return (system_msg, results)
-
         query_results = (
             QueryEngine.client.query.get(
                 class_name="Chunk",
@@ -25,7 +21,7 @@ class RetrieverEngine(QueryEngine):
                 grouped_task=f"You are a chatbot for RAG, answer the query {query_string} based on the given context. Only use information provided in the context. Only if asked or required provide code examples based on the topic at the end of your answer encapsulated with ```programming-language ```"
             )
             .with_additional(properties=["score"])
-            .with_limit(8)
+            .with_limit(2)
             .do()
         )
 
@@ -33,13 +29,7 @@ class RetrieverEngine(QueryEngine):
             raise Exception(query_results)
 
         results = query_results["data"]["Get"]["Chunk"]
-
-        if results[0]["_additional"]["generate"]["error"]:
-            system_msg = results[0]["_additional"]["generate"]["error"]
-        else:
-            system_msg = results[0]["_additional"]["generate"]["groupedResult"]
-            self.add_semantic_cache(query_string, results, system_msg)
-
+        system_msg = results[0]["_additional"]["generate"]["error"]
         return (system_msg, results)
 
     def retrieve_document(self, doc_id: str) -> dict:

@@ -80,28 +80,6 @@ def chunk_doc(
 # Loading Files from Directory
 
 
-def load_suggestions(file_path: Path) -> dict:
-    """Loads json file with suggestions
-
-    @param dir_path : Path - Path to directory
-    @returns dict - Dictionary of filename (key) and their content (value)
-    """
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    # Check if data is a list
-    if not isinstance(data, list):
-        msg.warn(f"{file_path} is not a list.")
-        return []
-
-    # Check if every item in the list is a string
-    if not all(isinstance(item, str) for item in data):
-        msg.warn(f"{file_path} is not a list of strings.")
-        return []
-
-    return data
-
-
 def load_file(file_path: Path) -> dict:
     """Loads text file
 
@@ -109,12 +87,12 @@ def load_file(file_path: Path) -> dict:
     @returns dict - Dictionary of filename (key) and their content (value)
     """
     file_contents = {}
-    file_types = ["txt", "md", "mdx"]
-
+    file_types = ["txt", "md", "mdx","json"]
+    print(file_path,"=====")
     if file_path.suffix not in file_types:
         msg.warn(f"{file_path.suffix} not supported")
         return {}
-
+    
     with open(file_path, "r", encoding="utf-8") as f:
         msg.info(f"Reading {str(file_path)}")
         file_contents[str(file_path)] = f.read()
@@ -135,7 +113,7 @@ def load_directory(dir_path: Path) -> dict:
     dir_path_str = str(dir_path)
 
     # Create a list of file types you want to read
-    file_types = ["txt", "md", "mdx"]
+    file_types = ["txt", "md", "mdx","json"]
 
     # Loop through each file type
     for file_type in file_types:

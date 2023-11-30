@@ -1,0 +1,5 @@
+{
+	"title": "Feishu Docs",
+	"url": "https://agiclass.feishu.cn/wiki/KjGYw8M6biYBtBkqXnucJ00InYb",
+	"html": "AI 全栈课程使用手册\nWiki table of contents\n欢迎你，未来的 AI 全栈工程师\n开始学习\n实验室的使用\n本地运行代码\n关于 gpt-3.5-turbo-instruct 本地运行代码\nsemantic_kernel 在本地运行\nFAQ\n提问指南\n(Mac) Python 环境安装&&版本切换\n(Window) Python环境安装\npip 是什么？\nVSCode 安装 && 使用指南\nPyCharm 安装及使用指南\n（加餐） Python环境与OpenAI基础概念\n本地运行OpenAI代码（多版本）\n如何获取：bing search key\n\nLog In or Sign Up\n本地运行代码\n安装 Python 运行环境\nPython 版本：建议3.9， 不能高于3.11\nWindows 环境\nmacOS 环境\n安装 VSCode 编辑器\n配置 OpenAI 环境变量\n测试\nOpenAI 新版 > v1.0.0 使用方式\n适用于 < v1.0.0 版本\n使用官方 OpenAI key\n备注\n本地运行代码​\nCreated on July 29\n如果觉得在实验室在线写代码不过瘾，也可以本地操作。请跟随下面步骤操作，搭建环境。​\n安装 Python 运行环境​\nPython 版本：建议3.9， 不能高于3.11​\n​\nWindows 环境​\n详细指南请参考：​(Window) Python环境安装 ​\n1.\n进入官网 https://www.python.org/，点击下载 → Windows，下一步，下一步，安装。​\n​\n​\n2.\n点击开始菜单，再点击运行，在弹出的窗口下面输入框中输入cmd，点击命令提示符。​\n​\n​\n3.\n输入命令 python -V ，有版本号被打印，就代表你成功了！​\nComments (0)\nHelp Center\nKeyboard Shortcuts"
+}
