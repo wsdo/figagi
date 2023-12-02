@@ -1,8 +1,6 @@
 import weaviate
 from weaviate import Client
-
 from app.common.util import setup_client
-
 
 class QueryEngine:
     """

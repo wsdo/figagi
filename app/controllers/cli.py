@@ -1,6 +1,6 @@
 import click
 from app.controllers.schema.init_schema import init_schema
-from app.controllers.reader.import_data import import_data
+from app.controllers.manager.ImportData import ImportData
 
 @click.group()
 def cli():
@@ -48,4 +48,4 @@ def clear_all_command(model):
 def import_data_command(path, model, clear):
     if clear:
         init_schema(model=model)
-    import_data(path, model)
+    ImportData(path, model)

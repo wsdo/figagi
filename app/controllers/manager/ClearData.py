@@ -8,20 +8,16 @@ from app.common.util import (
     import_documents,
     import_chunks,
 )
-from app.controllers.reader.preprocess import (
-    load_directory,
-    convert_files,
-    chunk_docs,
-    load_file,
-)
+from app.controllers.reader.ProcessingHub import (process_file,process_directory,chunk_docs,convert_files)
 
 from app.controllers.schema.init_schema import init_schema
 from dotenv import load_dotenv
 
+# processing_hub = ProcessingHub()
+
 load_dotenv()
 
-
-def import_data(path_str: str, model: str):
+def ImportData(path_str: str, model: str):
     data_path = Path(path_str)
     msg.divider("Starting data import")
     nlp = spacy.blank("en")
@@ -39,10 +35,13 @@ def import_data(path_str: str, model: str):
 
     file_contents = {}
 
+    print('====',data_path)
+
     if data_path.is_file():
-        file_contents = load_file(data_path)
+        file_contents = process_file(data_path)
+        print(file_contents,"======")
     else:
-        file_contents = load_directory(data_path)
+        file_contents = process_directory(data_path)
 
     if file_contents:
         documents = convert_files(client, file_contents, nlp=nlp)

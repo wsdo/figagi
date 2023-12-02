@@ -7,13 +7,19 @@ from app.controllers.cli import clear_all_command as clear_all
 from app.controllers.cli import import_data_command as import_data
 from server.web_ui import AgiUIInterface
 
-agikb_interface = AgiUIInterface()
-LaunchInterface = agikb_interface.launch_interface()
 @click.group()
 def cli():
     """Main command group for verba."""
     pass
 
+@cli.command()
+def webui():
+    """
+    Launch the web UI interface.
+    """
+    agikb_interface = AgiUIInterface()
+    launch_interface = agikb_interface.launch_interface()
+    launch_interface()
 
 @cli.command()
 @click.option(
@@ -31,7 +37,6 @@ def start(model):
 
 cli.add_command(init_ingest, name="init")
 cli.add_command(import_data, name="import")
-cli.add_command(LaunchInterface, name="webui")
 cli.add_command(clear_all, name="clear")
 
 if __name__ == "__main__":

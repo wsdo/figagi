@@ -1,7 +1,5 @@
 import os
-
-from wasabi import msg  # type: ignore[import]
-
+from wasabi import msg
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware

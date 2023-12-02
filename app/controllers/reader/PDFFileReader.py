@@ -3,18 +3,16 @@ import os
 import json
 
 from app.common.util import hash_string
-
 from spacy.tokens import Doc
 from spacy.language import Language
-
 from weaviate import Client
-
 from pathlib import Path
-
 from wasabi import msg  # type: ignore[import]
 
-# Chunking
-
+try:
+    from PyPDF2 import PdfReader
+except Exception:
+    msg.warn("PyPDF2 not installed, your base installation might be corrupted.")
 
 def chunk_docs(
     raw_docs: list[Doc],
@@ -80,27 +78,46 @@ def chunk_doc(
 # Loading Files from Directory
 
 
-def load_file(file_path: Path) -> dict:
-    """Loads text file
+from pathlib import Path
+from PyPDF2 import PdfReader
 
-    @param dir_path : Path - Path to directory
+def pdf_load_file(file_path: Path) -> dict:
+    """Loads a PDF file and returns its contents in a dictionary.
+    @param file_path : Path - Path to the file
     @returns dict - Dictionary of filename (key) and their content (value)
     """
     file_contents = {}
-    file_types = ["txt", "md", "mdx","json"]
-    print(file_path,"=====")
-    if file_path.suffix not in file_types:
-        msg.warn(f"{file_path.suffix} not supported")
+    file_types = [".pdf"]
+
+    # Check if the file type is supported
+    if file_path.suffix.lower() not in file_types:
+        print(f"{file_path.suffix} not supported.")
         return {}
+
+    # Initialize a variable to hold the full text of the PDF
+    full_text = ""
     
-    with open(file_path, "r", encoding="utf-8") as f:
-        msg.info(f"Reading {str(file_path)}")
-        file_contents[str(file_path)] = f.read()
-    msg.good(f"Loaded {len(file_contents)} files")
+    # Read the PDF file
+    try:
+        reader = PdfReader(file_path)
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:  # Check if text was successfully extracted
+                full_text += text + "\n\n"
+    except Exception as e:
+        print(f"Error reading file {file_path}: {e}")
+        return {}
+
+    # Store the extracted text in the dictionary
+    file_contents[file_path.name] = full_text.strip()
+
+    print(f"Loaded file: {file_path.name}")
+
     return file_contents
 
 
-def load_directory(dir_path: Path) -> dict:
+
+def pdf_load_directory(dir_path: Path) -> dict:
     """Loads text files from a directory and its subdirectories.
 
     @param dir_path : Path - Path to directory
@@ -113,7 +130,7 @@ def load_directory(dir_path: Path) -> dict:
     dir_path_str = str(dir_path)
 
     # Create a list of file types you want to read
-    file_types = ["txt", "md", "mdx","json"]
+    file_types = ["pdf", "md", "mdx","json"]
 
     # Loop through each file type
     for file_type in file_types:
@@ -129,60 +146,3 @@ def load_directory(dir_path: Path) -> dict:
 
     msg.good(f"Loaded {len(file_contents)} files")
     return file_contents
-
-
-# Creating spaCy Documents
-
-
-def convert_files(
-    client: Client, files: dict, nlp: Language, doc_type: str = "Documentation"
-) -> list[Doc]:
-    """Converts list of strings to list of Documents
-    @parameter files : dict - Dictionary with filenames and their content
-    @parameter nlp : dict - A NLP Language model
-    @parameter doc_type : str - Document type (code, blogpost, podcast)
-    @returns list[Doc] - A list of spaCy documents
-    """
-    raw_docs = []
-    for file_name in files:
-        doc = nlp(text=files[file_name])
-        doc.user_data = {
-            "doc_name": file_name,
-            "doc_hash": hash_string(file_name),
-            "doc_type": doc_type,
-            "doc_link": "",
-        }
-        msg.info(f"Converted {doc.user_data['doc_name']}")
-        if not check_if_file_exits(client, file_name):
-            raw_docs.append(doc)
-        else:
-            msg.warn(f"{file_name} already exists in database")
-
-    msg.good(f"All {len(raw_docs)} files successfully loaded")
-
-    return raw_docs
-
-
-def check_if_file_exits(client: Client, doc_name: str) -> bool:
-    results = (
-        client.query.get(
-            class_name="Document",
-            properties=[
-                "doc_name",
-            ],
-        )
-        .with_where(
-            {
-                "path": ["doc_name"],
-                "operator": "Equal",
-                "valueText": doc_name,
-            }
-        )
-        .with_limit(1)
-        .do()
-    )
-
-    if results["data"]["Get"]["Document"]:
-        return True
-    else:
-        return False
