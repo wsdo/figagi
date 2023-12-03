@@ -7,10 +7,10 @@ from spacy.tokens import Doc
 from spacy.language import Language
 import glob
 from app.controllers.reader.PDFFileReader import (
-    pdf_load_file, pdf_load_directory
+    pdf_load_file
 ) 
 from app.controllers.reader.TextFileReader import (
-    text_load_file, text_load_directory
+    text_load_file
 ) 
 
 def chunk_docs(
