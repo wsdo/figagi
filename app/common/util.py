@@ -21,8 +21,8 @@ def setup_client() -> Optional[Client]:
     msg.info("正在设置客户端")
 
     openai_key = os.environ.get("OPENAI_API_KEY", "")
-    weaviate_url = os.environ.get("VERBA_URL", "")
-    weaviate_key = os.environ.get("VERBA_API_KEY", "")
+    weaviate_url = os.environ.get("WEAVIATE_URL", "")
+    weaviate_key = os.environ.get("WEAVIATE_API_KEY", "")
 
     if openai_key == "":
         msg.fail("OPENAI_API_KEY 环境变量未设置")
@@ -36,19 +36,19 @@ def setup_client() -> Optional[Client]:
         else:
             ssl._create_default_https_context = _create_unverified_https_context
 
-        msg.info("VERBA_URL 环境变量未设置，使用 Weaviate Embedded")
+        msg.info("WEAVIATE_URL 环境变量未设置，使用 Weaviate Embedded")
         client = weaviate.Client(
             additional_headers={"X-OpenAI-Api-Key": openai.api_key},
             embedded_options=EmbeddedOptions(
-                persistence_data_path="./.verba/local/share/",
-                binary_path="./.verba/cache/weaviate-embedded",
+                persistence_data_path="./.agiaid/local/share/",
+                binary_path="./.agiaid/cache/weaviate-embedded",
             ),
         )
         msg.good("客户端已连接到本地 Weaviate 服务器")
         return client
 
     elif weaviate_key == "":
-        msg.warn("VERBA_API_KEY 环境变量未设置")
+        msg.warn("WEAVIATE_API_KEY 环境变量未设置")
 
     openai.api_key = openai_key
     url = weaviate_url
