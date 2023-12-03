@@ -4,37 +4,26 @@ from app.common.util import setup_client
 
 class QueryEngine:
     """
-    An interface for agikb Query Engine.
+    用于AGIAID查询引擎的接口。
+    此类提供了与Weaviate数据库交互的基本方法。
     """
 
     client: Client = None
 
     def __init__(self):
+        """
+        构造函数，初始化查询引擎，并设置Weaviate客户端。
+        """
         QueryEngine.client = setup_client()
 
     def query(self, query_string: str) -> tuple:
-        """Execute a query to a receive specific chunks from Weaviate
-        @parameter query_string : str - Search query
-        @returns tuple - (system message, iterable list of results)
-        """
-        raise NotImplementedError("query must be implemented by a subclass.")
+        raise NotImplementedError("query 方法必须由子类实现。")
 
     def retrieve_document(self, doc_id: str) -> dict:
-        """Return a document by it's ID (UUID format) from Weaviate
-        @parameter doc_id : str - Document ID
-        @returns dict - Document dict
-        """
-        raise NotImplementedError(
-            "retrieve_document must be implemented by a subclass."
-        )
+        raise NotImplementedError("retrieve_document 方法必须由子类实现。")
 
     def retrieve_all_documents(self) -> list:
-        """Return all documents from Weaviate
-        @returns list - Document list
-        """
-        raise NotImplementedError(
-            "retrieve_all_documents must be implemented by a subclass."
-        )
+        raise NotImplementedError("retrieve_all_documents 方法必须由子类实现。")
 
     def get_client(self) -> Client:
         return QueryEngine.client

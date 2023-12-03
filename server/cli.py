@@ -9,7 +9,7 @@ from server.web_ui import AgiUIInterface
 
 @click.group()
 def cli():
-    """Main command group for verba."""
+    """Main command group for agiaid."""
     pass
 
 @cli.command()
@@ -31,7 +31,7 @@ def start(model):
     """
     Run the FastAPI application.
     """
-    os.environ["VERBA_MODEL"] = model
+    os.environ["AGIAID_MODEL"] = model
     uvicorn.run("server.api:app", host="0.0.0.0", port=6000, reload=True)
 
 

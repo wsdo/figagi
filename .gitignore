@@ -9,5 +9,5 @@ build
 ~
 .local
 .cache
-.verba
 .vscode
+.agiaid

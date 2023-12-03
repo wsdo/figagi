@@ -11,3 +11,7 @@ setuptools
 wheel
 twine
 spacy
+requests
+pypdf2
+pre-commit
+gradio

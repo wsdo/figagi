@@ -22,7 +22,6 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
-    "https://verba-golden-ragtriever.onrender.com",
     "http://localhost:6000",
 ]
 
@@ -74,22 +73,6 @@ async def root():
             },
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
-
-
-# Define health check endpoint
-@app.get("/api/get_google_tag")
-async def get_google_tag():
-    tag = os.environ.get("VERBA_GOOGLE_TAG", "")
-
-    if tag:
-        msg.good("Google Tag available!")
-
-    return JSONResponse(
-        content={
-            "tag": tag,
-        }
-    )
-
 
 # Receive query and return chunks and query answer
 @app.post("/api/query")
