@@ -13,7 +13,7 @@ class AgiUIInterface:
         system_msg, results = self.agikb_engine.query(
             payload['query']
         )
-        
+        print('====system_msg=====',system_msg)
         # Extract the appropriate response from 'results'
         response = results if results else "I'm not sure how to respond to that."
         if 'groupedResult' in results[0]['_additional']['generate']:
