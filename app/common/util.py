@@ -10,8 +10,8 @@ from spacy.tokens import Doc
 from weaviate.embedded import EmbeddedOptions
 
 from wasabi import msg
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 def setup_client() -> Optional[Client]:
     """
