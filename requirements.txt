@@ -11,7 +11,6 @@ setuptools
 wheel
 twine
 spacy==3.6.1
-tiktoken==0.5.1
 sentence-transformer
 transformers
 torch
