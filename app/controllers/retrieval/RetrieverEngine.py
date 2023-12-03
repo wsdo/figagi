@@ -18,7 +18,7 @@ class RetrieverEngine(QueryEngine):
             )
             .with_hybrid(query=query_string)
             .with_generate(
-                grouped_task=f"You are a chatbot for RAG, answer the query {query_string} based on the given context. Only use information provided in the context.用中文回答 "
+                grouped_task=f"您是RAG的聊天机器人，根据给定的上下文回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
             )
             .with_additional(properties=["score"])
             .with_limit(2)
