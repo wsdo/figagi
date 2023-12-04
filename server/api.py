@@ -21,6 +21,7 @@ agiaid_engine = RetrieverEngine()
 app = FastAPI()
 
 origins = [
+    "http://localhost:3001",
     "http://localhost:3000",
     "http://localhost:6000",
 ]
@@ -37,6 +38,8 @@ app.add_middleware(
 BASE_DIR = Path(__file__).resolve().parent
 class QueryPayload(BaseModel):
     query: str
+class OpenAIPayload(BaseModel):
+    messages: object
 
 
 class GetDocumentPayload(BaseModel):
@@ -99,6 +102,28 @@ async def query(payload: QueryPayload):
             }
         )
 
+
+@app.post("/v1/chat/completions")
+async def create_chat_completion(payload:OpenAIPayload):
+    try:
+        results = agiaid_engine.openai_query(payload.messages)
+        msg.good(f"Succesfully processed query: {payload.messages}")
+
+        return results
+    
+    except Exception as e:
+        msg.fail(f"Query failed")
+        print(e)
+        return JSONResponse(
+            content={
+                "system": f"Something went wrong! {str(e)}",
+                "documents": [],
+            }
+        )
+ 
+
+
+    
 # Retrieve specific document based on UUID
 @app.post("/api/get_document")
 async def get_document(payload: GetDocumentPayload):
