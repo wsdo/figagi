@@ -16,8 +16,8 @@ class RetrieverEngine(QueryEngine):
         )
 
         
-        return response
-        # return response.choices[0].message.content
+        # return response
+        return response.choices[0].message.content
 
 
     def query(self, query_string: str) -> tuple:
