@@ -2,6 +2,8 @@ from app.controllers.retrieval.interface import QueryEngine
 from typing import Optional
 import json
 from wasabi import msg
+from dotenv import load_dotenv
+load_dotenv()
 
 from openai import OpenAI
 client = OpenAI()
@@ -36,7 +38,7 @@ class RetrieverEngine(QueryEngine):
 
         results = query_results["data"]["Get"]["Chunk"]
         # pre_query = f"您是RAG的聊天机器人，根据给定的上下文{results}, 回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
-        
+
         openai_res  = self.generate_response(query_string)
         return (results, openai_res)
     
