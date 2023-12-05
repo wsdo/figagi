@@ -1,30 +1,22 @@
 from app.controllers.retrieval.interface import QueryEngine
-from openai import OpenAI
 from typing import Optional
 import json
 from wasabi import msg
 
+from openai import OpenAI
 client = OpenAI()
 
 class RetrieverEngine(QueryEngine):
 
     def generate_response(self, messages):
-        print("===generate_response==",messages)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=messages
+            messages=messages,
+            stream=True
         )
-
-        print("===QueryEngine==",response)
-        # return response
-        return response.choices[0].message.content
-
-
+        return response
+    
     def query(self, query_string: str) -> tuple:
-        """Execute a query to a receive specific chunks from Weaviate
-        @parameter query_string : str - Search query
-        @returns tuple - (system message, iterable list of results)
-        """
         query_results = (
             QueryEngine.client.query.get(
                 class_name="Chunk",
@@ -39,33 +31,19 @@ class RetrieverEngine(QueryEngine):
             .do()
         )
 
-        # print("====",openai_res)
-
         if "data" not in query_results:
             raise Exception(query_results)
 
         results = query_results["data"]["Get"]["Chunk"]
         # pre_query = f"您是RAG的聊天机器人，根据给定的上下文{results}, 回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
-        print('query_string',query_string)
+        
         openai_res  = self.generate_response(query_string)
-        # system_msg = results[0]["_additional"]["generate"]["error"]
         return (results, openai_res)
     
     def openai_query(self, query_string)-> tuple:
-        """Execute a query to a receive specific chunks from Weaviate
-        @parameter query_string : str - Search query
-        @returns tuple - (system message, iterable list of results)
-        """
-        # 获取最后的查询
-        # last_content = query_string[-1]['content']
 
-        print("===query_string====",query_string)
-
-        # Extracting the last content
+        # 获取当前查询的 Query
         last_content = query_string[-1]['content'] if query_string else None
-
-
-        print("===last_content====",last_content)
 
         # 通过向量数据库查询
         vector_query_results = (
@@ -81,40 +59,24 @@ class RetrieverEngine(QueryEngine):
             .with_limit(1)
             .do()
         )
-        # print("====",openai_res)
 
-        # if "data" not in query_results:
-            # raise Exception(query_results)
-
+        # 向量数据库查询的结果
         vector_res = vector_query_results["data"]["Get"]["Chunk"]
-        print("===vector_query_results====",vector_res)
-        # pre_query = f"您是RAG的聊天机器人，根据给定的上下文{results}, 回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
-        print("===query_string===",query_string)
 
+        pre_query = f"您是RAG的聊天机器人，根据给定的上下文{vector_res}, 回答查询{last_content} 仅使用上下文提供的信息，务必用中文回答"
         database_results = [
-            {'role': 'user', 'content': str(vector_res)}
+            {'role': 'user', 'content': pre_query}
         ]
         
         # 合并这两个数组
         combined_messages = query_string + database_results
-        print('combined_messages',combined_messages)
+        
         # 用向量数据库的结果，向 OpenAI 查询
         openai_res = self.generate_response(combined_messages)
-
-        # 现在 combined_messages 包含了来自数据库和原始消息的所有内容
-        # 接下来可以将 combined_messages 传递给 OpenAI
-
-
-        print('===query_results=====',openai_res)
-
-        # system_msg = results[0]["_additional"]["generate"]["error"]
         return openai_res
 
     def retrieve_document(self, doc_id: str) -> dict:
-        """Return a document by it's ID (UUID format) from Weaviate
-        @parameter doc_id : str - Document ID
-        @returns dict - Document dict
-        """
+
         document = QueryEngine.client.data_object.get_by_id(
             doc_id,
             class_name="Document",
@@ -122,9 +84,6 @@ class RetrieverEngine(QueryEngine):
         return document
 
     def retrieve_all_documents(self) -> list:
-        """Return all documents from Weaviate
-        @returns list - Document list
-        """
         query_results = (
             QueryEngine.client.query.get(
                 class_name="Document", properties=["doc_name", "doc_type", "doc_link"]
@@ -139,10 +98,6 @@ class RetrieverEngine(QueryEngine):
         return results
 
     def search_documents(self, query: str) -> list:
-        """Search for documents from Weaviate
-        @parameter query_string : str - Search query
-        @returns list - Document list
-        """
         query_results = (
             QueryEngine.client.query.get(
                 class_name="Document", properties=["doc_name", "doc_type", "doc_link"]
