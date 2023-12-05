@@ -42,4 +42,4 @@ def slow_echo(message, history):
 demo = gr.ChatInterface(slow_echo).queue()
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(root_path="/gradio-demo")
