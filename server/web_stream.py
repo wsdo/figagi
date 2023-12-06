@@ -101,5 +101,5 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     demo.queue(concurrency_count=20)
 
 if __name__ == "__main__":
-    # demo.launch(root_path="/aid/",debug=True)
-    demo.launch(debug=True)
+    demo.launch(root_path="/teacher/",debug=True)
+    # demo.launch(debug=True)
