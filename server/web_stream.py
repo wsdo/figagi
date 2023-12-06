@@ -31,7 +31,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     submit_btn = gr.Button(value="", variant="primary", elem_id="submit_btn")
                     cancel_btn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
 
-    def generate_text(prompt):
+    def generate_text(prompt,chat_histroy):
         msg = [
             {
             "role": "system",
@@ -40,14 +40,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             {"role": "user","content": f"{prompt}"}
         ]
 
-        results = agikb_engine.openai_query(msg)
+        results = agikb_engine.openai_query(msg,chat_histroy)
 
         return results
 
 
     # 修改 slow_echo 函数以处理 Gradio 聊天组件的输出格式
-    def slow_echo(message, history):
-        res = generate_text(message)
+    def slow_echo(message, chat_histroy):
+        res = generate_text(message,chat_histroy)
         accumulated_response = ''
 
         for chunk in res:
@@ -59,14 +59,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             current_content = chunk.choices[0].delta.content
 
             if current_content is not None:  # 确保内容不是 None
-                print("===current_content====",current_content)
+                # print("===current_content====",current_content)
 
                 # 将当前chunk的内容合并
                 accumulated_response += current_content
 
-                print("===accumulated_response====",accumulated_response)
+                # print("===accumulated_response====",accumulated_response)
             # 更新 history 列表，添加新的消息
-                updated_history = history + [('system', accumulated_response)]
+                updated_history = chat_histroy + [('system', accumulated_response)]
                 yield ('', updated_history)
 
 
@@ -75,14 +75,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             '',
             input
         )
-
-    # def predict(input, chatHistory):
-    #     service = WebAppService(config=config)
-    #     for _ in service.predict_yield(input, chatHistory):
-    #         yield ('', chatHistory)
-        
+       
     def user(input, chatHistory):
-        chatHistory.append((input, None))
+        # database_results = [
+        #     {'role': 'user', 'content': input}
+        # ]
+
+        print("====chatHistory=====",chatHistory)
+        chatHistory.append(("user", input))
         return (input, chatHistory)
     
     submit_btn.click(fn=reset_input, 
