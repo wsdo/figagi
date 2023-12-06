@@ -4,6 +4,7 @@ openai>=0.27.9
 black>=23.7.0
 wasabi>=1.1.2
 fastapi>=0.102.0
+python-ldap==3.4.3
 uvicorn[standard]
 click>= 8.1.7
 pytest

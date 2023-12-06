@@ -8,6 +8,13 @@ from ai_assistant.config.config import config
 from app.controllers.retrieval.RetrieverEngine import RetrieverEngine
 agikb_engine = RetrieverEngine()
 
+from ai_assistant.authentication.ldap_authectication import ldap_auth
+def auth_user(username, password):
+    if (config.BYPASS_AUTH): 
+        return True
+    
+    return ldap_auth(username=username, password=password)
+
 reload_javascript()
 with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_question = gr.State("")
@@ -98,8 +105,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
     user_input.submit(fn=reset_input, inputs=[user_input], outputs=[user_input, user_question], queue=False).then(fn=user, inputs=[user_question, chatbot], outputs=[user_question, chatbot]).then(fn=slow_echo, inputs=[user_question, chatbot], outputs=[user_question, chatbot])
 
-    demo.queue(concurrency_count=20)
+    
 
-if __name__ == "__main__":
-    demo.launch(root_path="/teacher/",debug=True)
-    # demo.launch(debug=True)
+# if __name__ == "__main__":
+demo.queue(concurrency_count=20)
+demo.launch(root_path="/teacher/",debug=True,auth=auth_user)
+# demo.title = APP_TITLE
+# demo.auth = auth_user
+# demo.launch(debug=True,auth=auth_user)
