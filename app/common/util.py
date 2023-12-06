@@ -1,7 +1,7 @@
 import hashlib
 import ssl
 import os
-
+import time
 import openai
 import weaviate
 from weaviate import Client
@@ -107,6 +107,7 @@ def import_documents(client: Client, documents: list[Doc]) -> dict:
             uuid = client.batch.add_data_object(properties, "Document")
             uuid_key = str(d.user_data["doc_hash"]).strip().lower()
             doc_uuid_map[uuid_key] = uuid
+            time.sleep(0.6)  # 添加延迟，每次循环延迟600毫秒
 
     msg.good("所有文档已导入")
     return doc_uuid_map
@@ -138,7 +139,8 @@ def import_chunks(client: Client, chunks: list[Doc], doc_uuid_map: dict) -> None
                 "doc_type": str(d.user_data["doc_type"]),
                 "chunk_id": int(d.user_data["_split_id"]),
             }
-
+        
             client.batch.add_data_object(properties, "Chunk")
+            time.sleep(0.6)
 
     msg.good("所有块已导入")

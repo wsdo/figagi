@@ -64,7 +64,7 @@ class RetrieverEngine(QueryEngine):
 
         # 向量数据库查询的结果
         vector_res = vector_query_results["data"]["Get"]["Chunk"]
-
+        print("==向量数据库查询的结果===",vector_res)
         pre_query = f"您是RAG的聊天机器人，根据给定的上下文{vector_res}, 回答查询{last_content} 仅使用上下文提供的信息，务必用中文回答"
         database_results = [
             {'role': 'user', 'content': pre_query}
@@ -75,6 +75,7 @@ class RetrieverEngine(QueryEngine):
         
         # 用向量数据库的结果，向 OpenAI 查询
         openai_res = self.generate_response(combined_messages)
+        print("==openai查询的结果===",openai_res)
         return openai_res
 
     def retrieve_document(self, doc_id: str) -> dict:
