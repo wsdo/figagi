@@ -45,7 +45,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         return results
 
 
-    # 修改 slow_echo 函数以处理 Gradio 聊天组件的输出格式
     def slow_echo(message, history):
         res = generate_text(message)
         accumulated_response = ''
@@ -59,16 +58,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             current_content = chunk.choices[0].delta.content
 
             if current_content is not None:  # 确保内容不是 None
-                print("===current_content====",current_content)
+                print(current_content)
 
                 # 将当前chunk的内容合并
-                accumulated_response += current_content
-
-                print("===accumulated_response====",accumulated_response)
-            # 更新 history 列表，添加新的消息
-                updated_history = history + [('system', accumulated_response)]
-                yield ('', updated_history)
-
+                # accumulated_response += current_content
+                # yield ('', accumulated_response)
+                if current_content:
+                    history.append(('system', current_content))
+                    yield '', history
 
     def reset_input(input):
         return (
@@ -82,9 +79,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     #         yield ('', chatHistory)
         
     def user(input, chatHistory):
-        chatHistory.append((input, None))
-        return (input, chatHistory)
-    
+        chatHistory.append(('user', input))
+        return input, chatHistory
+
+        
     submit_btn.click(fn=reset_input, 
                         inputs=[user_input], 
                         outputs=[user_input, user_question], 
@@ -98,7 +96,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
     user_input.submit(fn=reset_input, inputs=[user_input], outputs=[user_input, user_question], queue=False).then(fn=user, inputs=[user_question, chatbot], outputs=[user_question, chatbot]).then(fn=slow_echo, inputs=[user_question, chatbot], outputs=[user_question, chatbot])
 
-    demo.queue(concurrency_count=20)
+    demo.queue()
 
 if __name__ == "__main__":
     # demo.launch(root_path="/aid/",debug=True)
