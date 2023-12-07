@@ -1,2 +1,6 @@
 2023-12-06 20:42:23,604 - ldap_authectication - ERROR - (0, 'Error')
 2023-12-06 20:42:37,282 - ldap_authectication - ERROR - (0, 'Error')
+2023-12-07 02:19:29,434 - ldap_authectication - ERROR - (0, 'Error')
+2023-12-07 02:19:43,728 - ldap_authectication - ERROR - (0, 'Error')
+2023-12-07 02:20:08,111 - ldap_authectication - ERROR - (0, 'Error')
+2023-12-07 02:24:25,393 - ldap_authectication - ERROR - {'msgtype': 97, 'msgid': 1, 'result': 49, 'desc': 'Invalid credentials', 'ctrls': []}
