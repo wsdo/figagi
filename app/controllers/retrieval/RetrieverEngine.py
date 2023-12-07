@@ -97,8 +97,6 @@ class RetrieverEngine(QueryEngine):
         # 合并两个列表
         merged_data = transformed_initial_data + database_results
 
-        # merged_data = transformed_initial_data + pre_query
-        
         print("\n ===database_results===",database_results)
         print("\n ===chat_histroy===",chat_histroy)
         print("\n ===transformed_initial_data===",transformed_initial_data)

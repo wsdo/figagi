@@ -84,10 +84,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         )
        
     def user(input, chatHistory):
-        # database_results = [
-        #     {'role': 'user', 'content': input}
-        # ]
-
         print("====chatHistory=====",chatHistory)
         chatHistory.append(("user", input))
         return (input, chatHistory)
