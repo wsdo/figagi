@@ -1,0 +1,5 @@
+{
+	"title": "Modules | 🦜️🔗 Langchain",
+	"url": "https://python.langchain.com/docs/modules/",
+	"html": "Skip to main content\n🦜️🔗 LangChain\nDocs\nUse cases\nIntegrations\nGuides\nAPI\nMore\n🦜️🔗\nChat\nSearch\n⌘\nK\nGet started\nIntroduction\nInstallation\nQuickstart\nSecurity\nLangChain Expression Language\nGet started\nWhy use LCEL\nInterface\nHow to\nCookbook\nModules\nModel I/O\nRetrieval\nAgents\nMore\nLangServe\nLangSmith\nModules\nModules\n\nLangChain provides standard, extendable interfaces and external integrations for the following main modules:\n\nModel I/O​\n\nInterface with language models\n\nRetrieval​\n\nInterface with application-specific data\n\nAgents​\n\nLet chains choose which tools to use given high-level directives\n\nAdditional​\nChains​\n\nCommon, building block compositions\n\nMemory​\n\nPersist application state between runs of a chain\n\nCallbacks​\n\nLog and stream intermediate steps of any chain\n\nPrevious\nLangChain Expression Language (LCEL)\nNext\nModel I/O\nAdditional\nCommunity\nDiscord\nTwitter\nGitHub\nPython\nJS/TS\nMore\nHomepage\nBlog\nCopyright © 2023 LangChain, Inc."
+}

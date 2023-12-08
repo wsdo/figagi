@@ -98,7 +98,7 @@ def init_schema(model: str = "gpt-3.5-turbo-16k"):
 
     if client.schema.exists("Document"):
         user_input = input(
-            "Document class already exists, do you want to overwrite it? (y/n): "
+            "此文档已经存在，你想重写吗? (y/n): "
         )
         if user_input.strip().lower() == "y":
             client.schema.delete_class("Document")

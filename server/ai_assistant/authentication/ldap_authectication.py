@@ -1,10 +1,3 @@
-'''
-Author: yuyingtao yuyingtao@agiclass.ai
-Date: 2023-06-25 23:28:05
-LastEditors: yuyingtao yuyingtao@agiclass.ai
-LastEditTime: 2023-06-26 04:03:02
-Description: 
-'''
 import ldap
 from ai_assistant.config.config import config 
 from ai_assistant.utils.logger import create_logger

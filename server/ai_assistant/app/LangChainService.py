@@ -15,7 +15,7 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.embeddings.openai import OpenAIEmbeddings
 from ai_assistant.utils.object import Object
-from ai_assistant.embedding.EmbeddingService import EmbeddingService
+from ai_assistant.embeddingx.EmbeddingService import EmbeddingService
 from ai_assistant.config.config import Config
 from langchain.chat_models import ChatOpenAI
 from langchain.callbacks.base import BaseCallbackManager
