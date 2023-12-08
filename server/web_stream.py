@@ -3,7 +3,6 @@ import gradio as gr
 from dotenv import load_dotenv
 load_dotenv()
 from ui.gradio_utils import reload_javascript, customCSS, small_and_beautiful_theme
-from ui.page_services.WebAppService import WebAppService
 from ai_assistant.config.config import config 
 from app.controllers.retrieval.RetrieverEngine import RetrieverEngine
 agikb_engine = RetrieverEngine()
