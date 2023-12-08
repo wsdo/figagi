@@ -1,10 +1,3 @@
-'''
-Author: yuyingtao yuyingtao@agiclas.cn
-Date: 2023-06-27 10:11:12
-LastEditors: yuyingtao yuyingtao@agiclas.cn
-LastEditTime: 2023-06-29 01:44:47
-Description: 
-'''
 import re
 
 # 将段落分成小的句子

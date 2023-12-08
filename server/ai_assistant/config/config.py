@@ -1,10 +1,3 @@
-'''
-Author: moemoefish moemoefish@qq.com
-Date: 2023-05-03 18:12:42
-LastEditors: yuyingtao yuyingtao@agiclas.cn
-LastEditTime: 2023-07-01 01:46:43
-Description: main config
-'''
 import os
 from ai_assistant.utils.logger import create_logger
 

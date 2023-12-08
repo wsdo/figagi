@@ -1,12 +1,3 @@
-'''
-Author: yuyingtao yuyingtao@agiclass.ai
-Date: 2023-05-04 12:40:12
-LastEditors: yuyingtao yuyingtao@agiclass.ai
-LastEditTime: 2023-06-26 15:52:06
-Description: 
-'''
-'''
-'''
 from typing import Dict
 class Object:
     pass
