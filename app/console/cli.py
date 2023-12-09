@@ -22,7 +22,7 @@ def start(model):
     """
     Run the FastAPI application.
     """
-    os.environ["AGIAID_MODEL"] = model
+    os.environ["TA_MODEL"] = model
     uvicorn.run("app.server.api:app", host="127.0.0.1", port=6000, reload=True)
 
 

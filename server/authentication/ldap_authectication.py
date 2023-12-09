@@ -1,6 +1,6 @@
 import ldap
-from ai_assistant.config.config import config 
-from ai_assistant.utils.logger import create_logger
+from config.config import config 
+from utils.logger import create_logger
 
 logger = create_logger('ldap_authectication')
 

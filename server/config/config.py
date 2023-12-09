@@ -1,5 +1,5 @@
 import os
-from ai_assistant.utils.logger import create_logger
+from utils.logger import create_logger
 
 logger = create_logger('config')
 
@@ -21,7 +21,7 @@ class Config:
         self.FILES_DIRECTORY = os.getenv('FILES_DIRECTORY', 'data/knowledge/files')
         self.KNOWLEDGE_BASE_PATH = os.getenv('KNOWLEDGE_BASE_PATH', 'http://locahost:7777')
 
-        self.LDAP_SERVER_URI = os.getenv('LDAP_SERVER_URI', '  ldap://39.106.15.22:3389')
+        self.LDAP_SERVER_URI = os.getenv('LDAP_SERVER_URI', '  ldap://x.x.x.:xxxx')
         self.LDAP_DEFAULT_ADMIN = os.getenv('LDAP_DEFAULT_ADMIN', 'cn=admin,dc=agiclass,dc=ai')
         self.LDAP_ADMIN_PASSWORD = os.getenv('LDAP_ADMIN_PASSWORD', 'some_password')
         self.LDAP_SEARCH_BASE = os.getenv('LDAP_SEARCH_BASE', 'ou=people, dc=agiclass, dc=ai')

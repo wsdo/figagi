@@ -1,13 +1,12 @@
-import time
 import gradio as gr
 from dotenv import load_dotenv
 load_dotenv()
 from ui.gradio_utils import reload_javascript, customCSS, small_and_beautiful_theme
-from ai_assistant.config.config import config 
+from config.config import config 
 from app.controllers.retrieval.RetrieverEngine import RetrieverEngine
 agikb_engine = RetrieverEngine()
 
-from ai_assistant.authentication.ldap_authectication import ldap_auth
+from authentication.ldap_authectication import ldap_auth
 def auth_user(username, password):
     if (config.BYPASS_AUTH): 
         return True

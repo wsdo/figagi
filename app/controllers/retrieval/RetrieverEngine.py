@@ -27,9 +27,9 @@ class RetrieverEngine(QueryEngine):
                 properties=["text", "doc_name", "chunk_id", "doc_uuid", "doc_type"],
             )
             .with_hybrid(query=query_string)
-            # .with_generate(
-            #     grouped_task=f"您是RAG的聊天机器人，根据给定的上下文回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
-            # )
+            .with_generate(
+                grouped_task=f"您是RAG的聊天机器人，根据给定的上下文回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
+            )
             .with_additional(properties=["score"])
             .with_limit(1)
             .do()
@@ -39,8 +39,6 @@ class RetrieverEngine(QueryEngine):
             raise Exception(query_results)
 
         results = query_results["data"]["Get"]["Chunk"]
-        # pre_query = f"您是RAG的聊天机器人，根据给定的上下文{results}, 回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
-
         openai_res  = self.generate_response(query_string)
         return (results, openai_res)
     
