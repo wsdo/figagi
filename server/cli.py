@@ -5,7 +5,7 @@ import os
 from app.controllers.cli import init as init_ingest
 from app.controllers.cli import clear_all_command as clear_all
 from app.controllers.cli import import_data_command as import_data
-from server.web_ui import AgiUIInterface
+from server.web import AgiUIInterface
 
 @click.group()
 def cli():
@@ -18,8 +18,8 @@ def webui():
     Launch the web UI interface.
     """
     agikb_interface = AgiUIInterface()
-    launch_interface = agikb_interface.launch_interface()
-    launch_interface()
+    # launch_interface = agikb_interface.launch_interface()
+    # launch_interface()
 
 @cli.command()
 @click.option(
