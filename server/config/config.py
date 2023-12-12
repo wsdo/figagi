@@ -1,5 +1,5 @@
 import os
-from utils.logger import create_logger
+from server.utils.logger import create_logger
 
 logger = create_logger('config')
 

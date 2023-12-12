@@ -1,12 +1,12 @@
 import gradio as gr
 from dotenv import load_dotenv
 load_dotenv()
-from ui.gradio_utils import reload_javascript, customCSS, small_and_beautiful_theme
-from config.config import config 
+from server.ui.gradio_utils import reload_javascript, customCSS, small_and_beautiful_theme
+from server.config.config import config 
 from app.controllers.retrieval.RetrieverEngine import RetrieverEngine
 agikb_engine = RetrieverEngine()
 
-from authentication.ldap_authectication import ldap_auth
+from server.authentication.ldap_authectication import ldap_auth
 def auth_user(username, password):
     if (config.BYPASS_AUTH): 
         return True

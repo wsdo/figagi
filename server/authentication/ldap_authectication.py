@@ -1,6 +1,6 @@
 import ldap
-from config.config import config 
-from utils.logger import create_logger
+from server.config.config import config 
+from server.utils.logger import create_logger
 
 logger = create_logger('ldap_authectication')
 
