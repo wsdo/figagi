@@ -62,6 +62,7 @@ class RetrieverEngine(QueryEngine):
 
         # 向量数据库查询的结果
         vector_res = vector_query_results["data"]["Get"]["Chunk"]
+        print("\n ==向量数据库查vector_query_results询的结果===",vector_query_results)
         print("\n ==向量数据库查询的结果===",vector_res)
         
         pre_query = f"{last_content}"

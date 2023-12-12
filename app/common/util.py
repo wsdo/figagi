@@ -13,7 +13,6 @@ from wasabi import msg
 from dotenv import load_dotenv
 load_dotenv()
 
-print("+++++++++++",os.environ.get("OPENAI_API_KEY", ""))
 def setup_client() -> Optional[Client]:
     """
     设置 Weaviate 客户端。
@@ -22,7 +21,7 @@ def setup_client() -> Optional[Client]:
     """
     msg.info("正在设置客户端")
 
-    openai_key = os.environ.get("OPENAI_API_KEY", "")
+    openai_key =  "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"
     print('====',openai_key)
     weaviate_url = os.environ.get("WEAVIATE_URL", "")
     weaviate_key = os.environ.get("WEAVIATE_API_KEY", "")

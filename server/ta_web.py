@@ -103,7 +103,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
 # if __name__ == "__main__":
 demo.queue(concurrency_count=20)
-demo.launch(debug=True,auth=auth_user,server_port=7860,root_path="/")
+demo.launch(debug=True,auth=auth_user,server_port=7860)
 # demo.title = APP_TITLE
 # demo.auth = auth_user
 # demo.launch(debug=True,auth=auth_user)
