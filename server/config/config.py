@@ -1,7 +1,7 @@
 import os
-from server.utils.logger import create_logger
+# from server.utils.logger import create_logger
 
-logger = create_logger('config')
+# logger = create_logger('config')
 
 class Config:
     def __init__(self):

@@ -1,8 +1,8 @@
 import ldap
 from server.config.config import config 
-from server.utils.logger import create_logger
+# from server.utils.logger import create_logger
 
-logger = create_logger('ldap_authectication')
+# logger = create_logger('ldap_authectication')
 
 def ldap_auth(username: str, password: str):
     if (not username or not password):
@@ -22,11 +22,11 @@ def ldap_auth(username: str, password: str):
             ldapconn.simple_bind_s(user_dn, password)  # 对用户的密码进行验证
             return True
         except Exception as e:
-            logger.info('login fail: user_dn: %s, username: %s', user_dn, username)
-            logger.info(e)
+            # logger.info('login fail: user_dn: %s, username: %s', user_dn, username)
+            # logger.info(e)
             return False
         else:
             return False
     except Exception as e:
-        logger.error(e)
+        # logger.error(e)
         return False
