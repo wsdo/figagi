@@ -14,9 +14,11 @@ script_dir = os.path.dirname(__file__)
 # custom_js_file_path = os.path.join(script_dir, "assets", "custom.js")
 
 with open(os.path.join(script_dir, "assets", "custom.js"), "r", encoding="utf-8") as f, \
-    open(os.path.join(script_dir, "assets", "external-scripts.js"), "r", encoding="utf-8") as f1:
+    open(os.path.join(script_dir, "assets", "external-scripts.js"), "r", encoding="utf-8") as f1, \
+    open(os.path.join(script_dir, "assets", "baidu.js"), "r", encoding="utf-8") as f2:
     customJS = f.read()
     externalScripts = f1.read()
+    externalScripts = f2.read()
 
 with open(os.path.join(script_dir, "assets", "custom.css"), "r", encoding="utf-8") as f:
     customCSS = f.read()
