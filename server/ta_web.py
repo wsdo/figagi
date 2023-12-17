@@ -44,7 +44,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             },
             {"role": "user","content": f"{prompt}"}
         ]
-
+        prompt("======",chat_histroy)
         results = agikb_engine.openai_query(msg,chat_histroy)
 
         return results

@@ -70,7 +70,17 @@ async def query(payload: QueryPayload):
 async def create_chat_completion(payload: OpenAIPayload):
     try:
         # 使用检索引擎处理 OpenAI 请求
-        results = agiaid_engine.openai_query(payload.messages)
+        msg = [
+            {
+            "role": "system",
+            "content": "\nYou are AI助教, a large language model trained by AGIClass."
+            },
+            {"role": "user","content": f"{payload.messages}"}
+        ]
+        chat_histroy = []
+        # results = agikb_engine.openai_query(msg,chat_histroy)
+    
+        results = agiaid_engine.openai_query(payload.messages,chat_histroy)
         msg.good(f"Succesfully processed query: {payload.messages}")
         return results
     
