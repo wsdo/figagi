@@ -8,7 +8,7 @@ from app.controllers.cli import import_data_command as import_data
 
 @click.group()
 def cli():
-    """Main command group for AGIAid."""
+    """Main command group for FigAGI."""
     pass
 
 

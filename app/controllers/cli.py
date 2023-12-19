@@ -4,7 +4,7 @@ from app.controllers.manager.ImportData import ImportData
 
 @click.group()
 def cli():
-    """Main command group for agiaid."""
+    """Main command group for FigAGI."""
     pass
 
 @cli.command()

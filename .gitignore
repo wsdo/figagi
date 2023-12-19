@@ -6,7 +6,7 @@
 # Compiled class file
 *.class
 
-
+data/
 # Log file
 *.log
 

@@ -1,7 +1,7 @@
 import os
 from wasabi import msg
 
-from app.common.util import setup_client
+from app.common.util import vector_client
 
 from dotenv import load_dotenv
 
@@ -11,7 +11,7 @@ load_dotenv()
 def init_schema(model: str = "gpt-3.5-turbo-16k"):
     msg.divider("Creating Document and Chunk class")
 
-    client = setup_client()
+    client = vector_client()
 
     chunk_schema = {
         "classes": [
@@ -98,7 +98,7 @@ def init_schema(model: str = "gpt-3.5-turbo-16k"):
 
     if client.schema.exists("Document"):
         user_input = input(
-            "此文档已经存在，你想重写吗? (y/n): "
+            "This document already exists, do you want to rewrite it? (y/n): "
         )
         if user_input.strip().lower() == "y":
             client.schema.delete_class("Document")

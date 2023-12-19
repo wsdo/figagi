@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="teach-assistant",
+    name="FigAGI",
     version="0.0.1",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
-            "ta=server.cli:cli"
+            "fa=server.cli:cli"
         ],
     },
     author="starkwang",

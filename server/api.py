@@ -9,18 +9,16 @@ from app.controllers.retrieval.RetrieverEngine import RetrieverEngine
 from dotenv import load_dotenv
 load_dotenv()
 
-agiaid_engine = RetrieverEngine()
+figagi_engine = RetrieverEngine()
 
 app = FastAPI()
 
-# 允许的源列表，用于配置 CORS
+# List of allowed sources, used for configuring CORS
 origins = [
-    "http://localhost:3001",
-    "http://localhost:3000",
     "http://localhost:6000",
 ]
 
-# 添加 CORS 中间件
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -29,25 +27,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 基础目录路径，用于文件服务等
+# Base directory path for file serving, etc.
 BASE_DIR = Path(__file__).resolve().parent
-
 
 class QueryPayload(BaseModel):
     query: str
 
 class OpenAIPayload(BaseModel):
-    messages: object
+    message: object
 
-# 查询接口，接收查询请求并返回结果
+# Query endpoint, receives query requests and returns results
 @app.post("/api/query")
 async def query(payload: QueryPayload):
     try:
-        # 使用检索引擎进行查询
-        system_msg, results = agiaid_engine.query(payload.query)
+        # Use retrieval engine to perform query
+        system_msg, results = figagi_engine.query(payload.query)
         msg.good(f"Succesfully processed query: {payload.query}")
 
-        # 返回成功的响应
+        # Return a successful response
         return JSONResponse(
             content={
                 "system": system_msg,
@@ -55,7 +52,7 @@ async def query(payload: QueryPayload):
             }
         )
     except Exception as e:
-        # 异常处理
+        # Exception handling
         msg.fail(f"Query failed")
         print(e)
         return JSONResponse(
@@ -65,27 +62,27 @@ async def query(payload: QueryPayload):
             }
         )
 
-# OpenAI 聊天完成接口
+# OpenAI chat completion endpoint
 @app.post("/v1/chat/completions")
 async def create_chat_completion(payload: OpenAIPayload):
     try:
-        # 使用检索引擎处理 OpenAI 请求
-        msg = [
+        # Process OpenAI request using retrieval engine
+        msgx = [
             {
-            "role": "system",
-            "content": "\nYou are AI助教, a large language model trained by AGIClass."
+                "role": "system",
+                "content": "\nYou are AI, a large language model trained by FigAGI."
             },
-            {"role": "user","content": f"{payload.messages}"}
+            {"role": "user","content": f"{payload.message}"}
         ]
-        chat_histroy = []
-        # results = agikb_engine.openai_query(msg,chat_histroy)
+        chat_history = [['user', '你好'], ['system', 'you are RAG chat bot']]
+        # results = agikb_engine.openai_query(msg,chat_history)
     
-        results = agiaid_engine.openai_query(payload.messages,chat_histroy)
-        msg.good(f"Succesfully processed query: {payload.messages}")
+        results = figagi_engine.api_openai_query(msgx,chat_history)
+        msg.good(f"Succesfully processed query: {msg}")
         return results
     
     except Exception as e:
-        # 异常处理
+        # Exception handling
         msg.fail(f"Query failed")
         print(e)
         return JSONResponse(

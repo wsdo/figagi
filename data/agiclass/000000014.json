@@ -1,5 +1,0 @@
-{
-	"title": "如何获取：bing search key - Feishu Docs",
-	"url": "https://agiclass.feishu.cn/wiki/NAXvwGm4AixovhkplWocvpOKnpb",
-	"html": "AI 全栈课程使用手册\nWiki table of contents\n欢迎你，未来的 AI 全栈工程师\n开始学习\n实验室的使用\n本地运行代码\nFAQ\n提问指南\n(Mac) Python 环境安装&&版本切换\n(Window) Python环境安装\npip 是什么？\nVSCode 安装 && 使用指南\nPyCharm 安装及使用指南\n（加餐） Python环境与OpenAI基础概念\n本地运行OpenAI代码（多版本）\n如何获取：bing search key\n\n如何获取：bing search key\n\nLast updated: Nov 26\n\n如何获取：bing search key​\nCreated on November 26\n参考这个文档：​\nhttps://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/create-bing-search-service-resource​\n​\n1.\n通过Azure Marketplace获取必应搜索服务：​\n◦\n访问Azure门户，并使用您的Microsoft账户登录。如果您还没有Microsoft账户，您需要创建一个。​\n◦\n在Azure门户中，搜索“Bing”来创建必应搜索服务资源。​\n​\n2. 获取必应自定义搜索API密钥：​\n•\n访问 https://portal.azure.com。​\n•\n搜索“Bing Custom Search”，然后点击“创建”。​\n​\n3. 获取必应站长工具API密钥：​\n•\n在必应站长工具上登录您的账户。如果您还没有账户，可以使用Microsoft、Google或Facebook ID注册。​\n•\n如果尚未完成，添加并验证您想通过API获取信息的网站。​\nComments (0)\nHelp Center\nKeyboard Shortcuts"
-}

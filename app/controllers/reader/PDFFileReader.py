@@ -8,41 +8,41 @@ from wasabi import msg
 try:
     from PyPDF2 import PdfReader
 except Exception:
-    msg.warn("PyPDF2未安装")
+    msg.warn("PyPDF2 not installed")
 
 def pdf_load_file(file_path: Path) -> dict:
     """
-    加载PDF文件并以字典形式返回其内容。
-    参数:
-        file_path : Path - 文件路径
-    返回:
-        dict - 字典，包含文件名（键）和内容（值）
+    Load a PDF file and return its contents in a dictionary.
+    Parameters:
+        file_path : Path - The path to the file.
+    Returns:
+        dict - A dictionary containing the filename (key) and content (value).
     """
     file_contents = {}
     file_types = [".pdf"]
 
-    # 检查文件类型是否支持
+    # Check if the file type is supported
     if file_path.suffix.lower() not in file_types:
-        print(f"{file_path.suffix} 不支持。")
+        print(f"{file_path.suffix} not supported.")
         return {}
 
-    # 初始化一个变量来保存PDF的全部文本
+    # Initialize a variable to hold the entire text of the PDF
     full_text = ""
     
-    # 读取PDF文件
+    # Read the PDF file
     try:
         reader = PdfReader(file_path)
         for page in reader.pages:
             text = page.extract_text()
-            if text:  # 检查是否成功提取了文本
+            if text:  # Check if text extraction was successful
                 full_text += text + "\n\n"
     except Exception as e:
-        print(f"读取文件 {file_path} 时出错：{e}")
+        print(f"Error reading file {file_path}: {e}")
         return {}
 
-    # 将提取的文本存储在字典中
+    # Store the extracted text in a dictionary
     file_contents[file_path.name] = full_text.strip()
 
-    print(f"已加载文件：{file_path.name}")
+    print(f"File loaded: {file_path.name}")
 
     return file_contents

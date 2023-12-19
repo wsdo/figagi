@@ -9,7 +9,7 @@ from app.controllers.cli import import_data_command as import_data
 
 @click.group()
 def cli():
-    """Main command group for agiaid."""
+    """Main command group for FigAGI."""
     pass
 
 @cli.command()
@@ -31,7 +31,7 @@ def start(model):
     """
     Run the FastAPI application.
     """
-    os.environ["AGIAID_MODEL"] = model
+    os.environ["FIGAGI_MODEL"] = model
     uvicorn.run("server.api:app", host="127.0.0.1", port=6001, reload=True)
 
 

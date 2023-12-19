@@ -20,34 +20,34 @@ def chunk_docs(
     split_overlap: int = 50,
 ) -> list[Doc]:
     """
-    将一系列文档分割成小块。
-    参数:
-        raw_docs : list[Doc] - 文档列表
-        nlp : Language - spaCy NLP对象
-        split_length : int - 块长度（词、句子、段落）
-        split_overlap : int - 块之间的重叠长度
-    返回:
-        list[Doc] - 分割后的文档列表
+    Split a series of documents into smaller chunks.
+    Parameters:
+        raw_docs : list[Doc] - List of documents
+        nlp : Language - spaCy NLP object
+        split_length : int - Chunk length (in words, sentences, paragraphs)
+        split_overlap : int - Overlap length between chunks
+    Returns:
+        list[Doc] - List of chunked documents
     """
-    msg.info("开始分割过程")
+    msg.info("Starting chunking process")
     chunked_docs = []
     for doc in raw_docs:
         chunked_docs += chunk_doc(doc, nlp, split_length, split_overlap)
-    msg.good(f"分割成功（总计 {len(chunked_docs)}）")
+    msg.good(f"Successfully chunked ({len(chunked_docs)} in total)")
     return chunked_docs
 
 def chunk_doc(
     doc: Doc, nlp: Language, split_length: int, split_overlap: int
 ) -> list[Doc]:
     """
-    将单个文档分割成小块。
-    参数:
-        doc : Doc - spaCy文档
-        nlp : Language - spaCy NLP对象
-        split_length : int - 块长度
-        split_overlap : int - 块之间的重叠长度
-    返回:
-        list[Doc] - 分割后的文档块列表
+    Split a single document into smaller chunks.
+    Parameters:
+        doc : Doc - spaCy document
+        nlp : Language - spaCy NLP object
+        split_length : int - Chunk length
+        split_overlap : int - Overlap length between chunks
+    Returns:
+        list[Doc] - List of chunked documents
     """
     if split_length > len(doc) or split_length < 1:
         return []
@@ -62,7 +62,7 @@ def chunk_doc(
         start_idx = i
         end_idx = i + split_length
         if end_idx > len(doc):
-            end_idx = len(doc)  # 调整最后一个块的结束位置
+            end_idx = len(doc)  # Adjust the end position for the last chunk
 
         doc_chunk = nlp.make_doc(doc[start_idx:end_idx].text)
         doc_chunk.user_data = doc.user_data.copy()
@@ -71,21 +71,21 @@ def chunk_doc(
 
         doc_chunks.append(doc_chunk)
 
-        # 如果这是最后一个可能的块，则退出循环
+        # Exit loop if this is the last possible chunk
         if end_idx == len(doc):
             break
 
-        i += split_length - split_overlap  # 考虑重叠部分向前移动
+        i += split_length - split_overlap  # Move forward considering the overlap
 
     return doc_chunks
 
 def process_file(file_path: Path) -> Dict:
     """
-    根据文件类型处理单个文件。
-    参数:
-        file_path : Path - 文件路径
-    返回:
-        dict - 文件内容的字典
+    Process a single file based on its type.
+    Parameters:
+        file_path : Path - Path to the file
+    Returns:
+        dict - Dictionary of file content
     """
     file_type = file_path.suffix.lower()
     if file_type in ['.pdf']:
@@ -93,7 +93,7 @@ def process_file(file_path: Path) -> Dict:
     elif file_type in ['.txt', '.md', '.mdx', '.json']:
         return text_load_file(file_path)
     else:
-        msg.warn(f"不支持的文件类型: {file_type}")
+        msg.warn(f"Unsupported file type: {file_type}")
         return {}
 
 def process_directory(dir_path: Path) -> Dict:
@@ -117,14 +117,14 @@ def convert_files(
     client: Client, files: dict, nlp: Language, doc_type: str = "Documentation"
 ) -> list[Doc]:
     """
-    将字符串列表转换为spaCy文档列表。
-    参数:
-        client : Client - 数据库客户端
-        files : dict - 文件名和内容的字典
-        nlp : Language - spaCy NLP对象
-        doc_type : str - 文档类型，默认为"Documentation"
-    返回:
-        list[Doc] - spaCy文档列表
+    Convert a list of strings to spaCy documents.
+    Parameters:
+        client : Client - Database client
+        files : dict - Dictionary of file names and contents
+        nlp : Language - spaCy NLP object
+        doc_type : str - Document type, default is "Documentation"
+    Returns:
+        list[Doc] - List of spaCy documents
     """
     raw_docs = []
     for file_name, file_content in files.items():
@@ -135,23 +135,23 @@ def convert_files(
             "doc_type": doc_type,
             "doc_link": "",
         }
-        msg.info(f"转换 {doc.user_data['doc_name']}")
+        msg.info(f"Converting {doc.user_data['doc_name']}")
         if not check_if_file_exits(client, file_name):
             raw_docs.append(doc)
         else:
-            msg.warn(f"{file_name} 已经存在于数据库中")
+            msg.warn(f"{file_name} already exists in the database")
 
-    msg.good(f"成功加载 {len(raw_docs)} 个文件")
+    msg.good(f"Successfully loaded {len(raw_docs)} files")
     return raw_docs
 
 def check_if_file_exits(client: Client, doc_name: str) -> bool:
     """
-    检查文件是否已存在于数据库中。
-    参数:
-        client : Client - 数据库客户端
-        doc_name : str - 文档名
-    返回:
-        bool - 文件是否存在
+    Check if a file already exists in the database.
+    Parameters:
+        client : Client - Database client
+        doc_name : str - Document name
+    Returns:
+        bool - Whether the file exists
     """
     results = (
         client.query.get(

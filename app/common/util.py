@@ -13,21 +13,20 @@ from wasabi import msg
 from dotenv import load_dotenv
 load_dotenv()
 
-def setup_client() -> Optional[Client]:
+def vector_client() -> Optional[Client]:
     """
-    设置 Weaviate 客户端。
+    Set up Weaviate client.
 
-    @returns Optional[Client] - 返回 Weaviate 客户端实例
+    @returns Optional[Client] - Returns an instance of Weaviate client
     """
-    msg.info("正在设置客户端")
+    msg.info("Setting up client")
 
-    openai_key =  "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"
-    print('====',openai_key)
+    openai_key = os.getenv('OPENAI_API_KEY')
     weaviate_url = os.environ.get("WEAVIATE_URL", "")
     weaviate_key = os.environ.get("WEAVIATE_API_KEY", "")
 
     if openai_key == "":
-        msg.fail("OPENAI_API_KEY 环境变量未设置")
+        msg.fail("OPENAI_API_KEY environment variable not set")
         return None
 
     elif weaviate_url == "":
@@ -38,19 +37,19 @@ def setup_client() -> Optional[Client]:
         else:
             ssl._create_default_https_context = _create_unverified_https_context
 
-        msg.info("WEAVIATE_URL 环境变量未设置，使用 Weaviate Embedded")
+        msg.info("WEAVIATE_URL environment variable not set, using Weaviate Embedded")
         client = weaviate.Client(
             additional_headers={"X-OpenAI-Api-Key": openai.api_key},
             embedded_options=EmbeddedOptions(
-                persistence_data_path="./.agiaid/local/share/",
-                binary_path="./.agiaid/cache/weaviate-embedded",
+                persistence_data_path="./.figagi/local/share/",
+                binary_path="./.figagi/cache/weaviate-embedded",
             ),
         )
-        msg.good("客户端已连接到本地 Weaviate 服务器")
+        msg.good("Client connected to local Weaviate server")
         return client
 
     elif weaviate_key == "":
-        msg.warn("WEAVIATE_API_KEY 环境变量未设置")
+        msg.warn("WEAVIATE_API_KEY environment variable not set")
 
     openai.api_key = openai_key
     url = weaviate_url
@@ -62,17 +61,17 @@ def setup_client() -> Optional[Client]:
         auth_client_secret=auth_config,
     )
 
-    msg.good("客户端已连接到 Weaviate 集群")
+    msg.good("Client connected to Weaviate cluster")
 
     return client
 
 
 def hash_string(text: str) -> str:
     """
-    对字符串进行哈希处理。
+    Hash a string.
 
-    @parameter text : str - 要进行哈希处理的字符串
-    @returns str - 哈希处理后的字符串
+    @parameter text : str - The string to hash
+    @returns str - The hashed string
     """
     sha256 = hashlib.sha256()
     sha256.update(text.encode())
@@ -81,11 +80,11 @@ def hash_string(text: str) -> str:
 
 def import_documents(client: Client, documents: list[Doc]) -> dict:
     """
-    将文档列表导入 Weaviate 客户端，并返回块匹配的 UUID 列表。
+    Import a list of documents into Weaviate client, and return a list of UUIDs for chunk matching.
 
-    @parameter client : Client - Weaviate 客户端
-    @parameter documents : list[Document] - 完整文档的列表
-    @returns dict - 返回 UUID 列表
+    @parameter client : Client - Weaviate client
+    @parameter documents : list[Document] - List of complete documents
+    @returns dict - Returns a list of UUIDs
     """
     doc_uuid_map = {}
 
@@ -93,7 +92,7 @@ def import_documents(client: Client, documents: list[Doc]) -> dict:
         batch.batch_size = 100
         for i, d in enumerate(documents):
             msg.info(
-                f"({i+1}/{len(documents)}) 正在导入文档 {d.user_data['doc_name']}"
+                f"({i+1}/{len(documents)}) Importing document {d.user_data['doc_name']}"
             )
 
             properties = {
@@ -106,40 +105,26 @@ def import_documents(client: Client, documents: list[Doc]) -> dict:
             uuid = client.batch.add_data_object(properties, "Document")
             uuid_key = str(d.user_data["doc_hash"]).strip().lower()
             doc_uuid_map[uuid_key] = uuid
-            time.sleep(0.6)  # 添加延迟，每次循环延迟600毫秒
+            time.sleep(0.6)  # Add delay, 600 milliseconds per loop
 
-    msg.good("所有文档已导入")
+    msg.good("All documents imported")
     return doc_uuid_map
 
 
 def import_chunks(client: Client, chunks: list[Doc], doc_uuid_map: dict) -> None:
     """
-    将文档块列表导入 Weaviate 客户端，并使用文档的 UUID 列表进行匹配。
+    Import a list of document chunks into Weaviate client, using the list of UUIDs for document matching.
 
-    @parameter client : Client - Weaviate 客户端
-    @parameter chunks : list[Document] - 文档块的列表
-    @parameter doc_uuid_map : dict - 文档块所属文档的 UUID 列表
+    @parameter client : Client - Weaviate client
+    @parameter chunks : list[Document] - List of document chunks
+    @parameter doc_uuid_map : dict - List of UUIDs for the documents the chunks belong to
     @returns None
     """
     with client.batch as batch:
         batch.batch_size = 100
         for i, d in enumerate(chunks):
             msg.info(
-                f"({i+1}/{len(chunks)}) 正在导入 {d.user_data['doc_name']} 的块 ({d.user_data['_split_id']})"
+                f"({i+1}/{len(chunks)}) Importing chunk of {d.user_data['doc_name']} ({d.user_data['_split_id']})"
             )
 
             uuid_key = str(d.user_data["doc_hash"]).strip().lower()
-            uuid = doc_uuid_map[uuid_key]
-
-            properties = {
-                "text": str(d.text),
-                "doc_name": str(d.user_data["doc_name"]),
-                "doc_uuid": uuid,
-                "doc_type": str(d.user_data["doc_type"]),
-                "chunk_id": int(d.user_data["_split_id"]),
-            }
-        
-            client.batch.add_data_object(properties, "Chunk")
-            time.sleep(0.6)
-
-    msg.good("所有块已导入")
