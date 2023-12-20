@@ -1,6 +1,6 @@
-# Teach Assistant Engine
+# FigAGI Engine
 
-The Fig AGI (fa) engine integrates multi-document data import functionality and vector database management, combined with the capabilities of the OpenAI model, enhancing the search for private data.
+The FigAGI (fa) engine integrates multi-document data import functionality and vector database management, combined with the capabilities of the OpenAI model, enhancing the search for private data.
 
 ## Core Features
 - **Multi-Format Compatibility**: Supports the import of various file formats including JSON, TXT, MD, and PDF.
