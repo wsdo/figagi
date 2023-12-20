@@ -5,11 +5,11 @@
 ### Java ###
 # Compiled class file
 *.class
-
+.idea
 data/
 # Log file
 *.log
-
+logs
 # BlueJ files
 *.ctxt
 
