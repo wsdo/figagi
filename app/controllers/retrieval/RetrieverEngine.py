@@ -11,8 +11,6 @@ client = OpenAI()
 class RetrieverEngine(QueryEngine):
 
     def generate_response(self, messages):
-
-        print("===messages==",messages)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
@@ -28,9 +26,9 @@ class RetrieverEngine(QueryEngine):
             )
             .with_hybrid(query=query_string)
             .with_generate(
-                grouped_task=f"您是RAG的聊天机器人，根据给定的上下文回答查询{query_string} 仅使用上下文提供的信息，务必用中文回答"
+                grouped_task=f"You are a RAG chatbot, answer the query {query_string} using only the information provided in the context, and be sure to answer in Chinese"
             )
-            .with_additional(properties=["score"])
+            # .with_additional(properties=["score"])
             .with_limit(1)
             .do()
         )
@@ -42,12 +40,12 @@ class RetrieverEngine(QueryEngine):
         openai_res  = self.generate_response(query_string)
         return (results, openai_res)
     
-    def openai_query(self, query_string,chat_histroy)-> tuple:
+    def openai_query(self, query_string, chat_history)-> tuple:
 
-        # 获取当前查询的 Query
+        # Get the current Query
         last_content = query_string[-1]['content'] if query_string else None
-        print("\n ==当前查询的问题===",last_content)
-        # 通过向量数据库查询
+        print("\n ==Current query question===",last_content)
+        # Query through the vector database
         vector_query_results = (
             QueryEngine.client.query.get(
                 class_name="Chunk",
@@ -60,58 +58,58 @@ class RetrieverEngine(QueryEngine):
             .do()
         )
 
-        # 向量数据库查询的结果
+        # Results from the vector database query
         vector_res = vector_query_results["data"]["Get"]["Chunk"]
-        print("\n ==向量数据库查vector_query_results询的结果===",vector_query_results)
-        print("\n ==向量数据库查询的结果===",vector_res)
+        print("\n ==Vector database query results===",vector_query_results)
+        print("\n ==Results from vector database===",vector_res)
         
         pre_query = f"{last_content}"
 
         for item in vector_res:
-            # 确保 '_additional' 字典存在且包含 'score' 键
+            # Ensure '_additional' dictionary exists and contains 'score' key
             if '_additional' in item and 'score' in item['_additional']:
-                # 将 score 值转换为浮点数
+                # Convert the score value to a float
                 score = float(item['_additional']['score'])
 
                 print("\n ====score====",score)
                 if score > 0.0121:
-                    pre_query = f"您是RAG的聊天机器人，根据给定的上下文{vector_res}, 回答查询{last_content} 仅使用上下文提供的信息，务必用中文回答"
+                    pre_query = f"You are a RAG chatbot, answer the query {last_content} using only the context provided in {vector_res}, and be sure to answer in Chinese"
                     print("\n ====pre_query====", pre_query)
-                    break  # 如果不需要检查其他项，则退出循环       
+                    break  # Exit the loop if no need to check other items
         
-        print("\n ====最终 pre_query====", pre_query)  # 检查循环结束后的 pre_query 值
+        print("\n ====Final pre_query====", pre_query)  # Check the value of pre_query after the loop
         database_results = [
             {'role': 'user', 'content': pre_query}
         ]
-        transformed_initial_data = [{'role': role, 'content': content} for role, content in chat_histroy]
+        transformed_initial_data = [{'role': role, 'content': content} for role, content in chat_history]
 
-        # 删除最后一个对象
+        # Remove the last object
         transformed_initial_data.pop()
 
-        # 待合并的数组
+        # Array to be merged
         database_results = [
-            {'role': 'user', 'content': pre_query}  # 假设 pre_query 已经定义
+            {'role': 'user', 'content': pre_query}  # Assuming pre_query is already defined
         ]
 
-        # 合并两个列表
+        # Merge the two lists
         merged_data = transformed_initial_data + database_results
 
         print("\n ===database_results===",database_results)
-        print("\n ===chat_histroy===",chat_histroy)
+        print("\n ===chat_history===",chat_history)
         print("\n ===transformed_initial_data===",transformed_initial_data)
         print("\n ===merged_data===",merged_data)
         
-        # 用向量数据库的结果，向 OpenAI 查询
+        # Query OpenAI with the results from the vector database
         openai_res = self.generate_response(merged_data)
-        print("\n ==openai查询的结果===",openai_res)
+        print("\n ==Results from OpenAI query===",openai_res)
         return openai_res
     
-    def api_openai_query(self, query_string,chat_histroy)-> tuple:
+    def api_openai_query(self, query_string, chat_history)-> tuple:
 
-        # 获取当前查询的 Query
+        # Get the current Query
         last_content = query_string[-1]['content'] if query_string else None
-        print("\n ==当前查询的问题===",last_content)
-        # 通过向量数据库查询
+        print("\n ==Current query question===",last_content)
+        # Query through the vector database
         vector_query_results = (
             QueryEngine.client.query.get(
                 class_name="Chunk",
@@ -124,50 +122,50 @@ class RetrieverEngine(QueryEngine):
             .do()
         )
 
-        # 向量数据库查询的结果
+        # Results from the vector database query
         vector_res = vector_query_results["data"]["Get"]["Chunk"]
-        print("\n ==向量数据库查vector_query_results询的结果===",vector_query_results)
-        print("\n ==向量数据库查询的结果===",vector_res)
+        print("\n ==Vector database query results===",vector_query_results)
+        print("\n ==Results from vector database===",vector_res)
         
         pre_query = f"{last_content}"
 
         for item in vector_res:
-            # 确保 '_additional' 字典存在且包含 'score' 键
+            # Ensure '_additional' dictionary exists and contains 'score' key
             if '_additional' in item and 'score' in item['_additional']:
-                # 将 score 值转换为浮点数
+                # Convert the score value to a float
                 score = float(item['_additional']['score'])
 
                 print("\n ====score====",score)
                 if score > 0.0121:
-                    pre_query = f"您是RAG的聊天机器人，根据给定的上下文{vector_res}, 回答查询{last_content} 仅使用上下文提供的信息，务必用中文回答"
+                    pre_query = f"You are a RAG chatbot, answer the query {last_content} using only the context provided in {vector_res}, and be sure to answer in Chinese"
                     print("\n ====pre_query====", pre_query)
-                    break  # 如果不需要检查其他项，则退出循环       
+                    break  # Exit the loop if no need to check other items
         
-        print("\n ====最终 pre_query====", pre_query)  # 检查循环结束后的 pre_query 值
+        print("\n ====Final pre_query====", pre_query)  # Check the value of pre_query after the loop
         database_results = [
             {'role': 'user', 'content': pre_query}
         ]
-        transformed_initial_data = [{'role': role, 'content': content} for role, content in chat_histroy]
+        transformed_initial_data = [{'role': role, 'content': content} for role, content in chat_history]
 
-        # 删除最后一个对象
+        # Remove the last object
         transformed_initial_data.pop()
 
-        # 待合并的数组
+        # Array to be merged
         database_results = [
-            {'role': 'user', 'content': pre_query}  # 假设 pre_query 已经定义
+            {'role': 'user', 'content': pre_query}  # Assuming pre_query is already defined
         ]
 
-        # 合并两个列表
+        # Merge the two lists
         merged_data = transformed_initial_data + database_results
 
         print("\n ===database_results===",database_results)
-        print("\n ===chat_histroy===",chat_histroy)
+        print("\n ===chat_history===",chat_history)
         print("\n ===transformed_initial_data===",transformed_initial_data)
         print("\n ===merged_data===",merged_data)
         
-        # 用向量数据库的结果，向 OpenAI 查询
+        # Query OpenAI with the results from the vector database
         openai_res = self.generate_response(merged_data)
-        print("\n ==openai查询的结果===",openai_res)
+        print("\n ==Results from OpenAI query===",openai_res)
         # return openai_res.choices[0].message.content
         return openai_res
 
